@@ -25,27 +25,22 @@ int main(){
     std::ofstream image_file;
     image_file.open("chapter_01.ppm");
 
-    int num_cols = 256;
-    int num_rows = 256;
-    write_ppm_header(num_rows, num_cols, 255, image_file);
+    int width = 256;
+    int height = 128;
+    write_ppm_header(width, height, 255, image_file);
 
-    // Random num generator
-    std::random_device rd; // Used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<int> rand_dist(0, 255);
+    for (int j = height - 1; j >= 0; j--){
+        for (int i = 0; i < width; i++){
 
-    for (int j = 0; j < num_rows; j++){
-        RGBColor c;
-        c.r = 255 - j;
-        c.g = rand_dist(gen);
-
-        for (int i = 0; i < num_cols; i++){
-            c.b = 255 - i;
+            RGBColor c;
+            c.r = (float(i) / float(width)) * 255.99;
+            c.g = (float(j) / float(height)) * 255.99;
+            c.b = 0.2 * 255.99;
             write_ppm_num(c, image_file);
-            if (i < num_cols - 1){
+
+            if (i < width - 1){
                 image_file << " ";
             }
-
         }
         image_file << std::endl;
     }
