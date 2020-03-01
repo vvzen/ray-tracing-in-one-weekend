@@ -9,7 +9,13 @@ vec3 color(const ray &r) {
     vec3 unit_direction = unit_vector(r.direction());
 
     float t = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+
+    vec3 start_col = vec3(1.0, 1.0, 1.0);
+    vec3 end_col = vec3(0.5, 0.7, 1.0);
+
+    // Linear interpolation, when t=0 I want start_col, when t=1 I want end_col
+    vec3 blended_value = (1.0 - t) * start_col + t * end_col;
+    return blended_value;
 }
 
 void write_ppm_header(int ncols, int nrows, int maxvalue, std::ofstream &f) {
@@ -32,13 +38,13 @@ int main() {
     std::ofstream image_file;
     image_file.open("chapter_03.ppm");
 
-    int width = 400;
-    int height = 200;
+    int width = 256;
+    int height = 128;
     write_ppm_header(width, height, 255, image_file);
 
-    vec3 lower_left_corner(-2.0, -1.0, -1.0);
-    vec3 horizontal(4.0, 0.0, 0.0);
-    vec3 vertical(0.0, 2.0, 0.0);
+    vec3 lower_left_corner(-1.0, -1.0, -1.0);
+    vec3 horizontal(20.0, 0.0, 0.0);
+    vec3 vertical(0.0, 10.0, 0.0);
     vec3 origin(0.0, 0.0, 0.0);
 
     for (int j = height - 1; j >= 0; j--) {
